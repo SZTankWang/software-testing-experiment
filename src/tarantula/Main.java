@@ -3,6 +3,10 @@ package tarantula;
 import java.util.Arrays;
 import java.io.File;
 import java.util.ArrayList;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.MalformedURLException;
+
 
 /**
  * This class outputs the suspiciousness and confidence of suspiciousness per line of a program. It requires two arguments
@@ -24,7 +28,41 @@ public class Main {
         int testCountInt = Integer.parseInt(testCountString);
             
         // create Runner class to get the failing cases from JUnit tests
-        Class testClass = Class.forName(args[1]); // example: "TarantulaCalculator.TriangleTest"
+        
+        //use an URLClassLoader
+        //get the url from arg[3], if it exists
+        System.out.println("Length of args: "+args.length+"\n");
+        Class testClass = null;
+        
+        //arg: 0: json file; 1:class path (null for triangle case); 2:class name 
+        if(!(args[1].equals("null"))) {
+            URL n ;
+            
+            try {
+            
+            n = new URL("file:///home/zhenming/defects4j/Lang/lang_1_buggy/lang_1_buggy/target/test-classes/");
+            System.out.println("Class path: "+args[1]+"\n");
+            URL[] cp_list = new URL[1];
+            cp_list[0] = n;
+            URLClassLoader urlcl = new URLClassLoader(cp_list);
+            
+            
+        	testClass = urlcl.loadClass(args[2]);
+//                URL cp = n.toURI().toURL();
+//               
+            }
+            
+            catch(MalformedURLException ex) {
+            	System.out.println("ERROR at try\n");
+            	System.exit(0);
+            }
+       	
+        	
+        }
+        else {
+        	testClass = Class.forName(args[2]);
+        }
+        	
         Runner r = new Runner(testClass);
         r.determineFailCases();
         ArrayList<Integer> fails = r.getFailCases();

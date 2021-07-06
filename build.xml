@@ -24,7 +24,7 @@
 
 <!-- Target to compile the project -->
     <target name="compile" depends="init" description="Compile">
-        <javac includeantruntime="true" srcdir="src" destdir="bin" debug="yes" fork="no">
+        <javac includeantruntime="true" srcdir="src/tarantula" destdir="bin" debug="yes" fork="no" encoding="UTF-8">
             <classpath refid="jar.files"/>
         </javac>
     </target>
@@ -38,6 +38,9 @@
             </classpath>
             <arg value="${arg0}"/>
             <arg value="${arg1}"/>
+            <arg value="${arg2}"/>
+            
+            
         </java>
     </target>
 </project>
